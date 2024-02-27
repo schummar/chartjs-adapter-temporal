@@ -1,12 +1,22 @@
 {
   "name": "chartjs-adapter-temporal",
+  "description": "Temporal/Intl API based time adapter for Chart.js",
+  "keywords": [
+    "chart",
+    "chartjs",
+    "adapter",
+    "time",
+    "temporal",
+    "intl",
+    "date",
+    "time scale"
+  ],
   "type": "module",
   "sideEffects": [
     "dist/register.js",
     "dist/register.cjs"
   ],
   "version": "1.0.0",
-  "description": "",
   "main": "dist/index.js",
   "exports": {
     ".": {
@@ -30,7 +40,6 @@
     "build": "tsup src --clean --format esm --format cjs --sourcemap --dts",
     "prepublishOnly": "runp build :p publint size-limit"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
