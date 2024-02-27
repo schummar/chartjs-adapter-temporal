@@ -18,3 +18,12 @@ Currently the Temporal API is not yet available in browsers. You can install one
 - [@js-temporal/polyfill
   ](https://www.npmjs.com/package/@js-temporal/polyfill)
 - [temporal-polyfill](https://www.npmjs.com/package/temporal-polyfill)
+
+## Register the adapter
+
+```ts
+import { _adapters } from 'chart.js/auto';
+import temporalAdapter from 'chartjs-adapter-temporal';
+
+_adapters._date.override(temporalAdapter);
+```
