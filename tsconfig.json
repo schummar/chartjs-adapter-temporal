@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM"],
+    "types": ["temporal-polyfill/global"],
+    "verbatimModuleSyntax": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["src"]
+}

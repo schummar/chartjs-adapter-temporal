@@ -1,0 +1,70 @@
+{
+  "name": "chartjs-adapter-temporal",
+  "type": "module",
+  "sideEffects": [
+    "dist/register.js",
+    "dist/register.cjs"
+  ],
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./register": {
+      "types": "./dist/register.d.ts",
+      "import": "./dist/register.js",
+      "require": "./dist/register.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "prettier --check src test",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "tsup src --clean --format esm --format cjs --sourcemap --dts",
+    "prepublishOnly": "runp build :p publint size-limit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@schummar/prettier-config": "github:schummar/prettier-config",
+    "@schummar/runp": "2.0.2",
+    "@size-limit/preset-small-lib": "11.0.2",
+    "chart.js": "4.4.1",
+    "prettier": "3.2.5",
+    "publint": "0.2.7",
+    "semantic-release": "23.0.2",
+    "size-limit": "11.0.2",
+    "temporal-polyfill": "0.2.2",
+    "tsup": "8.0.2",
+    "typescript": "5.3.3",
+    "vitest": "1.3.1"
+  },
+  "volta": {
+    "node": "20.11.1",
+    "pnpm": "8.15.4"
+  },
+  "prettier": "@schummar/prettier-config",
+  "size-limit": [
+    {
+      "name": "index",
+      "path": "dist/index.js",
+      "limit": "1 KB"
+    },
+    {
+      "name": "register",
+      "path": "dist/register.js",
+      "limit": "1.1 KB"
+    }
+  ],
+  "peerDependencies": {
+    "chart.js": ">=4"
+  }
+}
