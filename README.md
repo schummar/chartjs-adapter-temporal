@@ -1,5 +1,5 @@
 [![npm badge](https://img.shields.io/npm/v/chartjs-adapter-temporal)](https://www.npmjs.com/package/chartjs-adapter-temporal)
-[![bundlejs badge](https://deno.bundlejs.com/?badge&q=chartjs-adapter-temporal)](https://bundlejs.com/?q=chartjs-adapter-temporal)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/chartjs-adapter-temporal)
 
 Time adapter for Chart.js using the Temporal API (Stage 3 proposal) and the Intl.DateTimeFormat API.
 
@@ -21,9 +21,17 @@ Currently the Temporal API is not yet available in browsers. You can install one
 
 ## Register the adapter
 
+Either explicitly register the adapter:
+
 ```ts
 import { _adapters } from 'chart.js/auto';
 import temporalAdapter from 'chartjs-adapter-temporal';
 
 _adapters._date.override(temporalAdapter);
+```
+
+Or use the `register` import:
+
+```ts
+import 'chartjs-adapter-temporal/register';
 ```
