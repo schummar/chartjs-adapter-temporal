@@ -23,6 +23,23 @@ describe('chart.js temporal adapter', () => {
     test('should be defined', () => {
       expect(adapter).toBeDefined();
     });
+
+    test('can be initialized', () => {
+      adapter.init({ locale: 'es' });
+      expect(adapter.options.locale).toBe('es');
+      expect(adapter.format(0, formats.datetime as any)).toBe('1 ene 1970, 1:00:00');
+    });
+
+    test('default timeZone', () => {
+      const originial = Temporal.Now.timeZoneId;
+      try {
+        adapter = new _adapters._date({});
+        Temporal.Now.timeZoneId = () => 'America/New_York';
+        expect(adapter.format(0, formats.datetime as any)).toBe('Dec 31, 1969, 7:00:00 PM');
+      } finally {
+        Temporal.Now.timeZoneId = originial;
+      }
+    });
   });
 
   describe('parse', () => {
@@ -34,6 +51,20 @@ describe('chart.js temporal adapter', () => {
     test('should parse local time correctly', () => {
       const timestamp = adapter.parse('2019-05-28T15:10:27.000');
       expect(timestamp).toBe(1559049027000);
+    });
+
+    test('should parse Date object correctly', () => {
+      const timestamp = adapter.parse(new Date('2019-05-28T15:10:27.000Z'));
+      expect(timestamp).toBe(1559056227000);
+    });
+
+    test('should parse number correctly', () => {
+      const timestamp = adapter.parse(1559056227000);
+      expect(timestamp).toBe(1559056227000);
+    });
+
+    test('should throw error for invalid date', () => {
+      expect(() => adapter.parse('invalid')).toThrow('Not a date: "invalid"');
     });
   });
 
@@ -100,7 +131,7 @@ describe('chart.js temporal adapter', () => {
       adapter = new _adapters._date({ timeZone: 'America/New_York' });
       const timestamp = adapter.parse('2019-05-28T15:10:27.000')!;
       expect(adapter.format(timestamp, formats.datetime as any)).toEqual(
-        'May 28, 2019, 9:10:27 PM',
+        'May 28, 2019, 3:10:27 PM',
       );
     });
   });

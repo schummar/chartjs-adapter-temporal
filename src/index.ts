@@ -55,14 +55,17 @@ const units: Temporal.DateTimeUnit[] = [
 
 const cache = new Map<string, Intl.DateTimeFormat>();
 
+function getTimeZone(options: AdapterOptions) {
+  return options.timeZone ?? Temporal.Now.timeZoneId();
+}
+
 const adapter: DateAdapter<AdapterOptions> = {
-  options: {
-    locale: typeof navigator === 'undefined' ? 'en-US' : navigator.language,
-    timeZone: Temporal.Now.timeZoneId(),
-  },
+  options: {},
 
   init(chartOptions) {
-    this.options.locale ??= chartOptions.locale || this.options.locale;
+    if (chartOptions.locale) {
+      this.options.locale = chartOptions.locale;
+    }
   },
 
   formats() {
@@ -70,21 +73,24 @@ const adapter: DateAdapter<AdapterOptions> = {
   },
 
   format(timestamp, format) {
+    const timeZone = getTimeZone(this.options);
+
     if (format === FORMATS.quarter) {
       const q =
         Math.floor(
-          Temporal.Instant.fromEpochMilliseconds(timestamp).toZonedDateTimeISO(
-            this.options.timeZone ?? 'UTC',
-          ).month / 3,
+          Temporal.Instant.fromEpochMilliseconds(timestamp).toZonedDateTimeISO(timeZone).month / 3,
         ) + 1;
       return `Q${q} - ${this.format(timestamp, FORMATS.year as any)}`;
     }
 
-    const key = `${this.options.locale}:${format}`;
+    const key = `${this.options.locale}:${timeZone}:${format}`;
     let formatter = cache.get(key);
 
     if (!formatter) {
-      formatter = new Intl.DateTimeFormat(this.options.locale, FORMAT_OPTIONS[format]);
+      formatter = new Intl.DateTimeFormat(this.options.locale, {
+        ...FORMAT_OPTIONS[format],
+        timeZone,
+      });
       cache.set(key, formatter);
     }
 
@@ -104,8 +110,12 @@ const adapter: DateAdapter<AdapterOptions> = {
       try {
         return Temporal.Instant.from(value).epochMilliseconds;
       } catch {
-        return Temporal.PlainDateTime.from(value).toZonedDateTime(this.options.timeZone ?? 'UTC')
-          .epochMilliseconds;
+        try {
+          return Temporal.PlainDateTime.from(value).toZonedDateTime(getTimeZone(this.options))
+            .epochMilliseconds;
+        } catch {
+          // ignore
+        }
       }
     }
 
@@ -121,7 +131,7 @@ const adapter: DateAdapter<AdapterOptions> = {
     const temporalUnit: keyof Temporal.DurationLike = `${unit}s` as const;
 
     return Temporal.Instant.fromEpochMilliseconds(timestamp)
-      .toZonedDateTimeISO(this.options.timeZone ?? 'UTC')
+      .toZonedDateTimeISO(getTimeZone(this.options))
       .add({ [temporalUnit]: amount }).epochMilliseconds;
   },
 
@@ -132,10 +142,10 @@ const adapter: DateAdapter<AdapterOptions> = {
 
     const temporalUnit = `${unit}s` as const;
     const _a = Temporal.Instant.fromEpochMilliseconds(a).toZonedDateTimeISO(
-      this.options.timeZone ?? 'UTC',
+      getTimeZone(this.options),
     );
     const _b = Temporal.Instant.fromEpochMilliseconds(b).toZonedDateTimeISO(
-      this.options.timeZone ?? 'UTC',
+      getTimeZone(this.options),
     );
 
     return _a.since(_b, { largestUnit: temporalUnit })[temporalUnit];
@@ -168,9 +178,7 @@ function startOf(
   unit: TimeUnit | 'isoWeek',
   options: AdapterOptions,
 ): Temporal.ZonedDateTime {
-  const ts = Temporal.Instant.fromEpochMilliseconds(_ts).toZonedDateTimeISO(
-    options.timeZone ?? 'UTC',
-  );
+  const ts = Temporal.Instant.fromEpochMilliseconds(_ts).toZonedDateTimeISO(getTimeZone(options));
 
   if (unit === 'millisecond') {
     return ts;
