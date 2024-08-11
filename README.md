@@ -1,7 +1,7 @@
 [![npm badge](https://img.shields.io/npm/v/chartjs-adapter-temporal)](https://www.npmjs.com/package/chartjs-adapter-temporal)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/chartjs-adapter-temporal)
 
-Time adapter for Chart.js using the Temporal API (Stage 3 proposal) and the Intl.DateTimeFormat API.
+Time adapter for Chart.js using the [Temporal API](https://github.com/tc39/proposal-temporal) (Stage 3 proposal) and the [Intl.DateTimeFormat API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat).
 
 # Getting started
 
