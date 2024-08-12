@@ -43,7 +43,7 @@
     "prepublishOnly": "runp build :p publint size-limit"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@schummar/prettier-config": "github:schummar/prettier-config",
     "@schummar/runp": "2.0.2",
