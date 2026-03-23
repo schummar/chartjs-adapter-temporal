@@ -15,12 +15,6 @@ export type FormatValue =
   | Intl.DateTimeFormatOptions
   | ((timestamp: number, context: FormatContext) => string);
 
-declare module 'chart.js' {
-  interface DateAdapter<T extends Record<string, any> = Record<string, any>> {
-    format(this: DateAdapter<T>, timestamp: number, format: FormatValue): string;
-  }
-}
-
 const FORMAT_OPTIONS: Record<
   string,
   Intl.DateTimeFormatOptions & { fractionalSecondDigits?: number }
@@ -88,7 +82,8 @@ const adapter: DateAdapter<AdapterOptions> = {
     return FORMATS;
   },
 
-  format(timestamp, format) {
+  format(timestamp, _format) {
+    const format = _format as FormatValue;
     const timeZone = getTimeZone(this.options);
 
     if (typeof format === 'function') {

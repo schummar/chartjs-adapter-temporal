@@ -85,4 +85,4 @@ The callback receives `(timestamp: number, context: { locale?: string; timeZone:
 
 > **Note on ISO weeks:** Use `yearOfWeek` (not `year`) when displaying week numbers — ISO week years don't always match the calendar year near New Year (e.g. 2022-01-01 is W52 of week-year 2021).
 
-> **Note on TypeScript:** Chart.js types `displayFormats` values as `string`. Non-string format values work at runtime (Chart.js passes them through to the adapter without validation), but you may need a type assertion in strict TypeScript.
+> **Note on TypeScript:** Chart.js types `displayFormats` values as `string`. Non-string format values work at runtime (Chart.js passes them through to the adapter without validation), but you may need a type assertion in strict TypeScript. See [chartjs/Chart.js#12220](https://github.com/chartjs/Chart.js/issues/12220).

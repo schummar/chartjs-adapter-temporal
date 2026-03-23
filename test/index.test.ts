@@ -137,35 +137,41 @@ describe('chart.js temporal adapter', () => {
 
     test('should format with Intl.DateTimeFormatOptions object', () => {
       const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
-      const result = adapter.format(timestamp, { weekday: 'short' });
+      const result = adapter.format(timestamp, { weekday: 'short' } as any);
       expect(result).toMatch(/^Di\.?$/);
     });
 
     test('should format with Intl.DateTimeFormatOptions object respecting locale', () => {
       adapter = new _adapters._date({ locale: 'en-US', timeZone: 'Europe/Berlin' });
       const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
-      const result = adapter.format(timestamp, { month: 'short', day: 'numeric' });
+      const result = adapter.format(timestamp, { month: 'short', day: 'numeric' } as any);
       expect(result).toEqual('May 28');
     });
 
     test('should format with callback function', () => {
       const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
-      const result = adapter.format(timestamp, (ts, { timeZone }) => {
+      const result = adapter.format(timestamp, ((
+        ts: number,
+        { timeZone }: { timeZone: string },
+      ) => {
         const date = Temporal.Instant.fromEpochMilliseconds(ts)
           .toZonedDateTimeISO(timeZone)
           .toPlainDate();
         const week = String(date.weekOfYear!).padStart(2, '0');
         return `${date.yearOfWeek}-W${week}`;
-      });
+      }) as any);
       expect(result).toEqual('2019-W22');
     });
 
     test('should pass locale and timeZone to callback function', () => {
       adapter = new _adapters._date({ locale: 'en-US', timeZone: 'America/New_York' });
       const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
-      const result = adapter.format(timestamp, (_ts, ctx) => {
+      const result = adapter.format(timestamp, ((
+        _ts: number,
+        ctx: { locale?: string; timeZone: string },
+      ) => {
         return `${ctx.locale}|${ctx.timeZone}`;
-      });
+      }) as any);
       expect(result).toEqual('en-US|America/New_York');
     });
   });
