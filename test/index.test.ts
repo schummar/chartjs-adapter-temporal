@@ -134,6 +134,40 @@ describe('chart.js temporal adapter', () => {
         'May 28, 2019, 3:10:27 PM',
       );
     });
+
+    test('should format with Intl.DateTimeFormatOptions object', () => {
+      const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
+      const result = adapter.format(timestamp, { weekday: 'short' });
+      expect(result).toMatch(/^Di\.?$/);
+    });
+
+    test('should format with Intl.DateTimeFormatOptions object respecting locale', () => {
+      adapter = new _adapters._date({ locale: 'en-US', timeZone: 'Europe/Berlin' });
+      const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
+      const result = adapter.format(timestamp, { month: 'short', day: 'numeric' });
+      expect(result).toEqual('May 28');
+    });
+
+    test('should format with callback function', () => {
+      const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
+      const result = adapter.format(timestamp, (ts, { timeZone }) => {
+        const date = Temporal.Instant.fromEpochMilliseconds(ts)
+          .toZonedDateTimeISO(timeZone)
+          .toPlainDate();
+        const week = String(date.weekOfYear!).padStart(2, '0');
+        return `${date.yearOfWeek}-W${week}`;
+      });
+      expect(result).toEqual('2019-W22');
+    });
+
+    test('should pass locale and timeZone to callback function', () => {
+      adapter = new _adapters._date({ locale: 'en-US', timeZone: 'America/New_York' });
+      const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
+      const result = adapter.format(timestamp, (_ts, ctx) => {
+        return `${ctx.locale}|${ctx.timeZone}`;
+      });
+      expect(result).toEqual('en-US|America/New_York');
+    });
   });
 
   describe('add', () => {
