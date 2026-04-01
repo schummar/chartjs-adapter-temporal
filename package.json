@@ -1,6 +1,6 @@
 {
   "name": "chartjs-adapter-temporal",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Temporal/Intl API based time adapter for Chart.js",
   "keywords": [
     "adapter",
@@ -14,6 +14,9 @@
   ],
   "license": "MIT",
   "author": "",
+  "repository": {
+    "url": "https://github.com/schummar/chartjs-adapter-temporal"
+  },
   "files": [
     "dist"
   ],
