@@ -33,7 +33,9 @@ describe('chart.js temporal adapter', () => {
     test('default timeZone', () => {
       const originial = Temporal.Now.timeZoneId;
       try {
-        adapter = new _adapters._date({});
+        adapter = new _adapters._date({
+          locale: 'en-US',
+        });
         Temporal.Now.timeZoneId = () => 'America/New_York';
         expect(adapter.format(0, formats.datetime as any)).toBe('Dec 31, 1969, 7:00:00 PM');
       } finally {
@@ -128,7 +130,10 @@ describe('chart.js temporal adapter', () => {
     });
 
     test('should format datetime correctly with custom timeZone', () => {
-      adapter = new _adapters._date({ timeZone: 'America/New_York' });
+      adapter = new _adapters._date({
+        locale: 'en-US',
+        timeZone: 'America/New_York',
+      });
       const timestamp = adapter.parse('2019-05-28T15:10:27.000')!;
       expect(adapter.format(timestamp, formats.datetime as any)).toEqual(
         'May 28, 2019, 3:10:27 PM',
