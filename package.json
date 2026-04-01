@@ -42,8 +42,7 @@
     "lint:check": "oxlint --type-aware --type-check",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "build": "tsdown src/index.ts src/register.ts --clean --format esm --format cjs --sourcemap --dts --exports",
-    "prepublishOnly": "runp build :p publint size-limit"
+    "build": "tsdown src/index.ts src/register.ts --clean --format esm --format cjs --sourcemap --dts --exports"
   },
   "devDependencies": {
     "@nx/js": "^22.6.3",
