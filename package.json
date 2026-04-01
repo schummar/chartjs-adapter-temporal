@@ -22,20 +22,19 @@
     "dist/register.js",
     "dist/register.cjs"
   ],
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
     "./register": {
-      "types": "./dist/register.d.ts",
-      "import": "./dist/register.js",
+      "import": "./dist/register.mjs",
       "require": "./dist/register.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "lint": "runp lint:*",
@@ -43,22 +42,23 @@
     "lint:check": "oxlint --type-aware --type-check",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "build": "tsup src --clean --format esm --format cjs --sourcemap --dts",
+    "build": "tsdown src/index.ts src/register.ts --clean --format esm --format cjs --sourcemap --dts --exports",
     "prepublishOnly": "runp build :p publint size-limit"
   },
   "devDependencies": {
+    "@nx/js": "^22.6.3",
     "@schummar/runp": "2.2.4",
     "@size-limit/preset-small-lib": "12.0.1",
     "@vitest/coverage-v8": "4.1.2",
     "chart.js": "4.5.1",
+    "nx": "^22.6.3",
     "oxfmt": "^0.43.0",
     "oxlint": "^1.58.0",
     "oxlint-tsgolint": "^0.19.0",
     "publint": "0.3.18",
-    "semantic-release": "25.0.3",
     "size-limit": "12.0.1",
     "temporal-polyfill": "0.3.2",
-    "tsup": "8.5.1",
+    "tsdown": "^0.21.7",
     "typescript": "6.0.2",
     "vitest": "4.1.2"
   },
@@ -68,12 +68,12 @@
   "size-limit": [
     {
       "name": "index",
-      "path": "dist/index.js",
+      "path": "dist/index.mjs",
       "limit": "1 KB"
     },
     {
       "name": "register",
-      "path": "dist/register.js",
+      "path": "dist/register.mjs",
       "limit": "1.1 KB"
     }
   ],
