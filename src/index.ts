@@ -158,6 +158,7 @@ const adapter: DateAdapter<AdapterOptions> = {
   endOf(timestamp, unit) {
     const start = startOf(timestamp, unit, this.options);
 
+    // @ts-expect-error 'isoWeek' was removed
     if (unit === 'isoWeek' || unit === 'week') {
       return start.add({ days: 7 }).epochMilliseconds;
     }

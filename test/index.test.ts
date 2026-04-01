@@ -1,6 +1,5 @@
 import 'temporal-polyfill/global';
 import '../src/register';
-
 import { _adapters, type DateAdapter } from 'chart.js';
 import { beforeEach, describe, expect, test } from 'vitest';
 
