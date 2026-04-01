@@ -4,6 +4,14 @@ on:
     branches:
       - master
       - next
+
+permissions:
+  id-token: write
+  contents: write
+
+env:
+  VOLTA_FEATURE_PNPM: 1
+
 jobs:
   release:
     name: Release
