@@ -1,7 +1,7 @@
-import 'temporal-polyfill/global';
-import '../src/register';
 import { _adapters, type DateAdapter } from 'chart.js';
-import { beforeEach, describe, expect, test } from 'vitest';
+import 'temporal-polyfill/global';
+import { beforeAll, beforeEach, describe, expect, test } from 'vitest';
+import '../src/register';
 
 const defaultAdapter: DateAdapter = new _adapters._date({
   locale: 'de-DE',
@@ -9,6 +9,10 @@ const defaultAdapter: DateAdapter = new _adapters._date({
 });
 const formats = defaultAdapter.formats();
 let adapter = defaultAdapter;
+
+beforeAll(() => {
+  Temporal.Now.timeZoneId = () => 'America/New_York';
+});
 
 beforeEach(() => {
   adapter = new _adapters._date({
@@ -30,16 +34,11 @@ describe('chart.js temporal adapter', () => {
     });
 
     test('default timeZone', () => {
-      const originial = Temporal.Now.timeZoneId;
-      try {
-        adapter = new _adapters._date({
-          locale: 'en-US',
-        });
-        Temporal.Now.timeZoneId = () => 'America/New_York';
-        expect(adapter.format(0, formats.datetime as any)).toBe('Dec 31, 1969, 7:00:00 PM');
-      } finally {
-        Temporal.Now.timeZoneId = originial;
-      }
+      adapter = new _adapters._date({
+        locale: 'en-US',
+      });
+      Temporal.Now.timeZoneId = () => 'America/New_York';
+      expect(adapter.format(0, formats.datetime as any)).toBe('Dec 31, 1969, 7:00:00 PM');
     });
   });
 
@@ -124,7 +123,7 @@ describe('chart.js temporal adapter', () => {
       adapter = new _adapters._date({ locale: 'en-US' });
       const timestamp = adapter.parse('2019-05-28T15:10:27.000Z')!;
       expect(adapter.format(timestamp, formats.datetime as any)).toEqual(
-        'May 28, 2019, 5:10:27 PM',
+        'May 28, 2019, 11:10:27 AM',
       );
     });
 
