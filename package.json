@@ -22,8 +22,8 @@
   ],
   "type": "module",
   "sideEffects": [
-    "dist/register.js",
-    "dist/register.cjs"
+    "dist/register.cjs",
+    "dist/register.mjs"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
